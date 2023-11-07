@@ -1,0 +1,36 @@
+arch - {{ .chezmoi.arch }}
+args - {{ .chezmoi.args }}
+cacheDir - {{ .chezmoi.cacheDir }}
+configFile - {{ .chezmoi.configFile }}
+executable - {{ .chezmoi.executable }}
+fqdnHostname - {{ .chezmoi.fqdnHostname }}
+gid - {{ .chezmoi.gid }}
+group - {{ .chezmoi.group }}
+homeDir - {{ .chezmoi.homeDir }}
+hostname - {{ .chezmoi.hostname }}
+kernel - {{ .chezmoi.kernel }}
+os - {{ .chezmoi.os }}
+osRelease - {{ .chezmoi.osRelease }}
+pathListSeparator - {{ .chezmoi.pathListSeparator }}
+pathSeparator - {{ .chezmoi.pathSeparator }}
+sourceDir - {{ .chezmoi.sourceDir }}
+sourceFile - {{ .chezmoi.sourceFile }}
+targetFile - {{ .chezmoi.targetFile }}
+uid - {{ .chezmoi.uid }}
+username - {{ .chezmoi.username }}
+windowsVersion - {{ .chezmoi.windowsVersion }}
+
+{{ "Commented" | comment "# " }}
+{{ completion "bash" }}
+
+current-context: {{ output "kubectl" "config" "current-context" | trim }}
+
+
+{{ $args := list "alpha" "beta" "gamma" }}
+command {{ $args | quoteList }}
+
+{{ if stat (joinPath .chezmoi.homeDir ".pyenv") }}
+# ~/.pyenv exists
+{{ else }}
+# pyenv not installed
+{{ end }}

@@ -1,0 +1,509 @@
+vim9script
+
+g:mapleader = "\<SPACE>"
+g:session_autosave = 'no'
+
+# Prevents distros from clobbering and causing unexpected behaviour
+set nocompatible
+
+# Enable filetype detection
+filetype on
+
+# Enable and load indent file for detected file type
+filetype indent on
+
+# Enable and load plugins for detected file type
+filetype plugin on
+
+# Enable syntax highlighting 
+syntax on
+
+# Fold based on indent
+set foldmethod=indent
+
+# Max levels to fold
+set foldnestmax=10
+
+# Disables folding on file open
+set nofoldenable
+
+set foldlevel=2
+
+# soft wraps the line
+set wrap
+
+# Enable auto completion menu after pressing tab
+set wildmenu
+
+# Make wildmenu behave like similar to Bash completion.
+set wildmode=list:longest
+set wildoptions=pum
+
+# Wildmenu will ignore files with these extensions.
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite,*node_modules/
+
+# Give more space for displaying messages.
+set cmdheight=2
+
+# Update time ( default is 4000 = 4ms) 
+#set updatetime=301
+
+# Don't pass messages to |ins-completion-menu|
+set shortmess+=c
+
+# Always show the signcolumn, otherwise it would shift the text each time
+# diagnostics appear/become resolved.
+if has("nvim-0.5.0") || has("patch-8.1.1564")
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
+# Use <tab> and <S-tab> to navigate completion list:
+#function! s:check_back_space() abort
+#  col = col('.') - 1
+#  return !col || getline('.')[col - 1]  =~ '\s'
+#endfunction
+
+# Insert <tab> when previous text is space, refresh completion if not.
+#inoremap <silent><expr> <TAB>
+#      \ coc#pum#visible() ? coc#pum#next(1):
+#      \ <SID>check_back_space() ? "\<Tab>" :
+#      \ coc#refresh()
+#inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+# Use <c-space> to trigger completion:
+#if has('nvim')
+#  inoremap <silent><expr> <c-space> coc#refresh()
+#else
+#  inoremap <silent><expr> <c-@> coc#refresh()
+#endif
+
+# Use <CR> to confirm completion, use:
+#inoremap <expr> <cr> coc#pum#visible() ? coc#_select_confirm() : "\<CR>"
+
+# To make <CR> to confirm selection of selected complete item or notify coc.nvim
+# to format on enter, use:
+#inoremap <silent><expr> <CR> coc#pum#visible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+
+# Use `[g` and `]g` to navigate diagnostics
+# Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+#nmap <silent> [g <Plug>(coc-diagnostic-prev)
+#nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+# GoTo code navigation.
+#nmap <silent> gd <Plug>(coc-definition)
+#nmap <silent> gy <Plug>(coc-type-definition)
+#nmap <silent> gi <Plug>(coc-implementation)
+#nmap <silent> gr <Plug>(coc-references)
+
+# Use K to show documentation in preview window.
+#nnoremap <silent> K :call ShowDocumentation()<CR>
+
+#function! ShowDocumentation()
+#  if CocAction('hasProvider', 'hover')
+#    call CocActionAsync('doHover')
+#  else
+#    call feedkeys('K', 'in')
+#  endif
+#endfunction
+#
+#" Highlight the symbol and its references when holding the cursor.
+#autocmd CursorHold * silent call CocActionAsync('highlight')
+#
+#" Symbol renaming.
+#nmap <leader>rn <Plug>(coc-rename)
+#
+#" Formatting selected code.
+#xmap <leader>f  <Plug>(coc-format-selected)
+#nmap <leader>f  <Plug>(coc-format-selected)
+#
+#augroup mygroup
+#  autocmd!
+#  " Setup formatexpr specified filetype(s).
+#  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+#  " Update signature help on jump placeholder.
+#  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+#augroup end
+#
+#" Applying codeAction to the selected region.
+#" Example: `<leader>aap` for current paragraph
+#xmap <leader>a  <Plug>(coc-codeaction-selected)
+#nmap <leader>a  <Plug>(coc-codeaction-selected)
+#
+#" Remap keys for applying codeAction to the current buffer.
+#nmap <leader>ac  <Plug>(coc-codeaction)
+#" Apply AutoFix to problem on the current line.
+#nmap <leader>qf  <Plug>(coc-fix-current)
+#
+#" Run the Code Lens action on the current line.
+#nmap <leader>cl  <Plug>(coc-codelens-action)
+#
+#" Map function and class text objects
+#" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+#xmap if <Plug>(coc-funcobj-i)
+#omap if <Plug>(coc-funcobj-i)
+#xmap af <Plug>(coc-funcobj-a)
+#omap af <Plug>(coc-funcobj-a)
+#xmap ic <Plug>(coc-classobj-i)
+#omap ic <Plug>(coc-classobj-i)
+#xmap ac <Plug>(coc-classobj-a)
+#omap ac <Plug>(coc-classobj-a)
+#
+#" Remap <C-f> and <C-b> for scroll float windows/popups.
+#if has('nvim-0.4.0') || has('patch-8.2.0750')
+#  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+#  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+#  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+#  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+#  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+#  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+#endif
+#
+#" Use CTRL-S for selections ranges.
+#" Requires 'textDocument/selectionRange' support of language server.
+#nmap <silent> <C-s> <Plug>(coc-range-select)
+#xmap <silent> <C-s> <Plug>(coc-range-select)
+#
+#" Add `:Format` command to format current buffer.
+#command! -nargs=0 Format :call CocActionAsync('format')
+#
+#" Add `:Fold` command to fold current buffer.
+#command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+#
+#" Add `:OR` command for organize imports of the current buffer.
+#command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+#
+#" Add (Neo)Vim's native statusline support.
+#" NOTE: Please see `:h coc-status` for integrations with external plugins that
+#" provide custom statusline: lightline.vim, vim-airline.
+#set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+#
+#" Mappings for CoCList
+#" Show all diagnostics.
+#nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+#" Manage extensions.
+#nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+#" Show commands.
+#nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+#" Find symbol of current document.
+#nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+#" Search workspace symbols.
+#nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+#" Do default action for next item.
+#nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+#" Do default action for previous item.
+#nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+#" Resume latest coc list.
+#nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+# Write a readonly file using sudo
+cmap w!! %!sudo tee > /dev/null %
+
+# Undo even after closing and opening a file
+if has('persistent_undo')
+    set undodir=$HOME/.vim/undo
+    set undofile
+    set undolevels=1000
+    set undoreload=10000
+endif
+
+# Some servers have issues with backup files, see #649.
+set nobackup
+set nowritebackup
+
+set backupdir=$HOME/.vim/backups
+set dir=$HOME/.vim/swap
+
+# Show the current mode
+set noshowmode
+
+# Show partial command from the last line of the screen
+set showcmd
+
+# Allow backspace over autoindent, line breaks, and start of insert
+set backspace=indent,eol,start
+
+# If no filetype specific indent is enabled, use same indent of current line
+set autoindent
+
+# Enable line numbers
+set number
+set relativenumber
+
+# Always show current position
+set ruler
+
+# Highlight current line
+set cursorline
+
+# Open new splits to the right and below (feels more natural)
+set splitright
+set splitbelow
+
+# Ignores case when searching
+set ignorecase
+
+# Try and be smart about cases
+set smartcase
+
+# Highlight search results
+set hlsearch
+
+# Make search more modern
+set incsearch
+
+# Turn magic on for regular expressions
+set magic
+
+# Show matching brackets
+set showmatch
+
+set background=dark
+
+set encoding=utf8
+
+# Use spaces instead of tabs
+set expandtab
+
+set smarttab
+
+# 1 tab == 2 spaces
+set shiftwidth=2
+set softtabstop=2
+
+# Use system clipboard
+set clipboard=unnamed
+
+
+# Python \{\{\{
+#
+augroup filetype_py
+  autocmd Filetype python setlocal expandtab tabstop=4 shiftwidth=4 softtabstop=4"
+#autocmd FileType python b:coc_root_patterns = ['.git', '.venv', 'pyproject.yaml', 'setup.cfg']
+# Need to add shortcut for flake8, black, tox, test, run, build, coverage. may
+# just be all tox
+augroup END
+# }}}
+
+# Go \{\{\{
+ 
+# run :GoBuild or :GoTestCompile based on the go file
+augroup filetype_go
+  #function! s:build_go_files()
+  #  l:file = expand('%')
+  #  if l:file =~# '^\f\+_test\.go$'
+  #    call go#test#Test(0, 1)
+  #  elseif l:file =~# '^\f\+\.go$'
+  #    call go#cmd#Build(0)
+  #  endif
+  #endfunction
+  #
+  
+  autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4
+  autocmd FileType go nnoremap <buffer> <C-t> :GoAddTags<CR>
+  #autocmd FileType go nmap <leader>b :<C-u>call <SID>build_go_files()<CR>
+  autocmd FileType go nmap <leader>r  <Plug>(go-run)
+  autocmd FileType go nmap <leader>t  <Plug>(go-test)
+  autocmd FileType go nmap <Leader>c <Plug>(go-coverage-toggle)
+  
+  # go-vim plugin specific commands
+  # Also run `goimports` on your current file on every save
+  # Might be be slow on large codebases, if so, just comment it out
+  g:go_fmt_command = "goimports"
+  
+  # Status line types/signatures.
+  g:go_auto_type_info = 1
+augroup END
+# }}}
+
+# GitGutter \{\{\{
+# Use fontawesome icons as signs
+g:gitgutter_sign_added = '+'
+g:gitgutter_sign_modified = '>'
+g:gitgutter_sign_removed = '-'
+g:gitgutter_sign_removed_first_line = '^'
+g:gitgutter_sign_modified_removed = '<'
+# }}}
+
+# Custom functions \{\{\{
+
+#function! OnSpace()
+#  if foldlevel('.')
+#    if foldclosed('.') != -1
+#      return 'zO'
+#    else
+#      return 'za'
+#    endif
+#  else
+#    return "\<Space>"
+#  endif
+#endfunction
+#
+# }}}
+
+# Tagbar \{\{\{
+
+g:tagbar_autofocu = 1 # Focus panel when opening
+g:tagbar_autoshowtag = 1 # Highlight the active tag
+g:tagbar_position = "botright vertical" # Make panel vertical and place on the right
+autocmd FileType python,c,cpp,go TagbarOpen
+
+# }}}
+
+# editorconfig \{\{\{
+  
+g:EditorConfig_execlude_patterns = ['fugitive://.*']
+
+# }}}
+
+# Fzf \{\{\{
+
+g:fzf_preview_window = 'right:50%'
+g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6  }  }
+
+g:fzf_action = {
+  'ctrl-t': 'tab split',
+  'ctrl-x': 'split',
+  'ctrl-v': 'vsplit'
+}
+
+$FZF_DEFAULT_OPTS = '--layout=reverse --inline-info'
+$FZF_DEFAULT_COMMAND = "rg --files --hidden --glob '!.git/**' --glob '!build/**' --glob '!.dart_tool/**' --glob '!.idea' --glob '!node_modules'"
+# }}}
+
+g:vimwiki_list = [{
+  'path': '~/projects/vimwiki',
+  'syntax': 'markdown',
+  'ext': '.md'
+  }]
+
+set sessionoptions-=help
+g:session_autoload = 0
+g:session_autosave_silent = 1
+
+g:ale_enabled = 1
+g:ale_fix_on_save = 1
+g:ale_fixers = {
+  'yaml': [
+    'yamlfmt',
+    'remove_trailing_lines',
+    'trim_whitespace',
+    ],
+}
+
+
+call glaive#Install()
+# Optional: Enable codefmt's default mappings on the <Leader>= prefi
+#Glaive codefmt plugin[mappings]
+#Glaive codefmt google_java_executable="java -jar /path/to/google-java-format-VERSION-all-deps.jar"
+
+# }}}
+
+iabbrev @@ ben@johnsontech.io
+
+:nnoremap <Leader>ve :vsplit $MYVIMRC<CR>
+:nnoremap <Leader>vr :source $MYVIMRC<CR>
+
+
+# Mappings \{\{\{
+
+# Mappings code goes here.
+
+# Map <C-L> (redraw screen) to also turn off search highlighting until the
+# next search
+#nnoremap <C-L> :nohl<CR><C-L>
+
+# Navigate the split view easier by pressing CTRL+j, CTRL+k, CTRL+h, or CTRL+l.
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
+
+# Toggle fold/unfold
+#nnoremap <silent> <Space> @=(OnSpace())<CR>
+
+# Toggle tagbar 
+nmap <F8> :TagbarToggle<CR>
+
+# Executes make run
+map <F5> :make run<CR><C-w><Up>
+
+# Executes make debug
+map <F6> :make debug<CR><C-w><Up>
+
+# Pressing \+` opens terminal at bottom of windows
+nmap <leader>` :botright terminal++rows=15<CR>
+
+# Clear search highlighting
+#nnoremap <Esc><Esc> :noh<CR>
+
+# }}}
+
+# vim script \{\{\{
+
+# This will enable code folding.
+# Use the marker method of folding.
+augroup filetype_vim
+    autocmd!
+    autocmd FileType vim setlocal foldmethod=marker
+augroup END
+
+# More Vimscripts code goes here.
+
+# }}}
+
+# Status Line \{\{\{
+
+# Status bar code goes here.
+
+# Always show status line
+set laststatus=2
+
+# Clear status line when vimrc is reloaded
+#set statusline=
+
+# %F - display full path of current file
+# %M - shows modified flag if unsaved
+# %Y - filetype in buffer
+# %R - shows read-only flag
+# %b - shows ASCII/Unicode char
+# 0x%B - shows Hex
+# %l - show row number
+# %c - show column number
+# %p%% - cursor percent from top
+
+# Left side
+#set statusline+=\ %F\%m\ %Y\ %R\
+
+# divider
+#set statusline+=%=
+
+# Right side
+#set statusline+=\ ascii:\ %b\ hex:\ 0x%B\ row:\ %l\ col:\ %c\ %p%% 
+
+# Format statusline
+#set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
+
+#  }}}
+
+# Visuals \{\{\{
+
+# Use ondeark.vim theme for airline
+g:airline_theme = 'onedark'
+g:airline_powerline_fonts = 1
+g:airline#extensions#tabline#enabled = 1
+colorscheme onedark
+
+g:tmuxline_preset = {
+  'a': '#S',
+  'win': ['#I #W'],
+  'cwin': ['#I', '#W', '#F'],
+  'x': ['%R', '%d-%b-%y'],
+  'y': '#W',
+  'z': '#H',
+}
+#colorscheme default
+# }}}

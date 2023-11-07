@@ -1,0 +1,77 @@
+#!/bin/bash
+
+set -eufo pipefail
+
+{{ $brews := list
+     "autoconf"
+     "bash"
+     "bash-completion@2"
+     "curl"
+     "fzf"
+     "gcc"
+     "gh"
+     "git"
+     "git-lfs"
+     "gnu-units"
+     "gnupg"
+     "go"
+     "golangci-lint"
+     "helm"
+     "hugo"
+     "kubernetes-cli"
+     "jq"
+     "make"
+     "protobuf"
+     "protoc-gen-go"
+     "protoc-gen-go-grpc"
+     "ncurses"
+     "node"
+     "pinentry-mac"
+     "pyenv"
+     "ripgrep"
+     "shellcheck"
+     "tmux"
+     "vim"
+     "glow"
+     "gum"
+     "vhs"
+     "pop"
+     "wget" -}}
+{{ $casks := list
+     "firefox"
+     "font-fira-code-nerd-font"
+     "iterm2"
+     "visual-studio-code"
+     "xquartz" -}}
+
+
+{{ if eq .chezmoi.arch "amd64" -}}
+{{   $brews = concat $brews (list
+       "shellcheck") -}}
+{{   $casks = concat $casks (list
+       "virtualbox") -}}
+{{ end -}}
+
+{{ if not .personal -}}
+{{   $brews = concat $brews (list
+       "postgis"
+       "postgresql"
+       "pspg") -}}
+{{   $casks = concat $casks (list
+       "1password-cli"
+       "balenaetcher"
+       "signal"
+       "telegram"
+       "transmission"
+       "viber"
+       "whatsapp") -}}
+{{ end -}}
+
+brew bundle --no-lock --file=/dev/stdin <<EOF
+{{ range ($brews | sortAlpha | uniq) -}}
+brew "{{ . }}"
+{{ end -}}
+{{ range ($casks | sortAlpha | uniq) -}}
+cask "{{ . }}"
+{{ end -}}
+EOF

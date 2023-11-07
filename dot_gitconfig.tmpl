@@ -1,0 +1,54 @@
+[user]
+	name = Ben Johnson
+	email = {{ .email }}
+[core]
+	# Use Notepad++
+	#editor = 'C:/Program Files (x86)/Notepad++/notepad++.exe' -multiInst -notabbar -nosession
+	# Use emacs, no window
+	#editor = emacs -nw
+	# Use Vim
+	editor = vim
+  #excludesfile = /home/hdb1991/.gitignore_global
+[color]
+	ui = auto
+[push]
+	default = simple
+  followTags = true
+[init]
+	defaultBranch = main
+[rebase]
+	stat = true
+[branch]
+	autosetuprebase = always
+[alias]
+	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+	pushfor = !sh -c 'git push origin HEAD:refs/for/$1' -
+	my-next = rev-list origin/main ^origin/main.rc --author={{ .email }} --pretty
+	my-rc = rev-list origin/main.rc ^origin/main --author={{ .email }} --pretty
+	my-main = rev-list origin/main --author={{ .email }} --pretty --after=\"14 days ago\"
+	show-rc = rev-list origin/main.rc ^origin/main --pretty
+	show-next = rev-list origin/main ^origin/main.rc --pretty
+	type = cat-file -t
+	dump = cat-file -p
+[commit]
+	template = ~/.gittemplate
+[pull]
+	rebase = true
+
+[credential]
+    helper = cache --timeout=28800 ; 8hr
+
+{{- if .personal }}
+[credential "https://git.johnsontech.io"]
+    username = ben
+{{- end }}
+[status]
+    short = true
+[tag]
+    forceSignAnnotated = true
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
